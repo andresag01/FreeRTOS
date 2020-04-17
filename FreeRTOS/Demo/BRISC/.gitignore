@@ -1,0 +1,7 @@
+*.bc
+*.ll
+*.disasm
+*.bin
+*.asm
+
+!startup.asm

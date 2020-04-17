@@ -13,9 +13,12 @@ INSTR_DB = /Users/andresag/Documents/repos/sure-specification/isa/instructions
 ARCH = cpu0
 OLEVEL = 2
 
+SYSROOT_DIR ?= /dir/that/does/not/exist
+INCLUDES = -I. -I../../Source/include -I../Common/include -I../../Source/portable/BRISC
+
 CFLAGS = -O$(OLEVEL) -emit-llvm -nostdlib -target $(ARCH) -ffreestanding \
-		-fno-stack-check -fno-stack-protector -I. \
-		-I../../Source/include -I../Common/include
+		-fno-stack-check -fno-stack-protector $(INCLUDES) \
+		-isystem $(SYSROOT_DIR) --sysroot $(SYSROOT_DIR)
 LFLAGS = -relocation-model=pic -march=$(ARCH) -O$(OLEVEL) -filetype=asm
 AFLAGS = --prog-handle 1       \
 	--handle-bits 16           \
@@ -26,7 +29,15 @@ AFLAGS = --prog-handle 1       \
 RTOS_SOURCE_DIR = ../../Source
 DEMO_SOURCE_DIR = ../Common/Minimal
 
-CSRCS = main.c $(DEMO_SOURCE_DIR)/integer.c
+CSRCS = main.c 									\
+	utils.c										\
+	string.h									\
+	$(DEMO_SOURCE_DIR)/integer.c				\
+	$(RTOS_SOURCE_DIR)/portable/BRISC/port.c	\
+	$(RTOS_SOURCE_DIR)/portable/BRISC/heap.c	\
+	$(RTOS_SOURCE_DIR)/tasks.c					\
+	$(RTOS_SOURCE_DIR)/queue.c					\
+	$(RTOS_SOURCE_DIR)/list.c
 ASRCS = $(addsuffix .asm,$(basename $(CSRCS))) startup.asm
 OUTPUT_BIN = main.bin
 ENTRY_FUNC = _start
@@ -48,7 +59,7 @@ all: $(OUTPUT_BIN)
 	@$(DISASSEMBLER) $@
 
 clean:
-	@$(RM) *.bc *.ll *.disasm *.bin $(addsuffix .asm,$(basename $(CSRCS)))
+	@$(RM) $(foreach ext,bc ll disasm bin asm,$(addsuffix .$(ext),$(basename $(CSRCS))))
 
 .PHONY: clean all
 .PRECIOUS: %.bc %.asm %.ll %.disasm %.bin

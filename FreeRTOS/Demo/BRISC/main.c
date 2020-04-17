@@ -40,7 +40,8 @@ static void prvSetupHardware( void );
 /*-----------------------------------------------------------*/
 
 /*
- * Starts all the other tasks, then starts the scheduler.
+ * Starts all the other tasks, then starts the scheduler. The processor is in
+ * INTERRUPT mode when executing this function.
  */
 int main( void )
 {
@@ -67,7 +68,12 @@ int main( void )
 	these demo application projects then ensure Supervisor mode is used here. */
 	vTaskStartScheduler();
 
-	/* Should never reach here! */
+	/*
+     * Return "out" of INTERRUPT mode. This will transfer control to
+     * exitInterruptHandler that contains only a couple of instructions to
+     * set the correct interrupt handler address. See startup.asm for more
+     * information on how this mechanism works
+     */
 	return 0;
 }
 
@@ -94,7 +100,7 @@ static void vErrorChecks( void *pvParameters )
 		{
 			/* An error has been detected in one of the tasks - flash faster. */
             /* TODO: Work out how to raise an exception */
-            fail( 1 );
+            fail();
 		}
 	}
 }
@@ -103,6 +109,9 @@ static void vErrorChecks( void *pvParameters )
 
 static void prvSetupHardware( void )
 {
+    // Do nothing... This is a functional simulator so there is nothing to set
+    // up for now. Also, the compatibility mode and stacks (for INTERRUPT,
+    // EXCEPTION and PANIC modes) were already created in startup.asm
 }
 
 /*-----------------------------------------------------------*/
