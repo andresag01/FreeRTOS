@@ -6,14 +6,12 @@
 #define configUSE_NEWLIB_REENTRANT 0
 
 /*
- * The minimal stack size MUST remain at 4 bytes because this is the space
- * required to store the stack pointer of subsequent function calls made by the
- * task.
- *
- * The stack MUST also contain space to save and restore the task's register
- * context (i.e. 14 words).
+ * The minimal stack size MUST remain at 15 words so that the following can be
+ * accommodated:
+ *	- Callee wp
+ *	- 14 registers
  */
-#define configMINIMAL_STACK_SIZE ( 4 + ( 4 * 14 ) )
+#define configMINIMAL_STACK_SIZE ( 15 )
 
 #define configMAX_PRIORITIES     5
 #define configUSE_PREEMPTION     1

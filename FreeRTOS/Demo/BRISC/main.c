@@ -46,12 +46,15 @@ static void prvSetupHardware( void );
 int main( void )
 {
     /* Set up the hardware for use */
+    printString("Setting up hardware...\n");
     prvSetupHardware();
 
     /* Start the demo/test application tasks */
+    printString("Setting up Integer task...\n");
     vStartIntegerMathTasks( tskIDLE_PRIORITY );
 
     /* Start the check task - which is defined in this file. */
+    printString("Creating ErrorChecks task...\n");
     xTaskCreate( vErrorChecks,
                  "Check",
                  configMINIMAL_STACK_SIZE,
@@ -66,6 +69,7 @@ int main( void )
 	called.  The demo applications included in the FreeRTOS.org download switch
 	to supervisor mode prior to main being called.  If you are not using one of
 	these demo application projects then ensure Supervisor mode is used here. */
+    printString("Starting scheduler...\n");
 	vTaskStartScheduler();
 
 	/*

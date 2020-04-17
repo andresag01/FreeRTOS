@@ -102,6 +102,11 @@ void printString(const char *s);
 void printHex(uint32_t v);
 void putchar(char c);
 
+/* Pointer handling */
+
+int isPointerAligned(void *p, uint32_t mask);
+void *alignPointer(void *p, uint32_t mask);
+
 /* Instruction identifiers for decoding during exception handling */
 
 #define INSTRUCTION_ADDB 0

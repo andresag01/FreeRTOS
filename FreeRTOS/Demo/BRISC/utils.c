@@ -45,6 +45,42 @@ __attribute__((naked)) uint32_t getProcessorMode(void)
 	);
 }
 
+__attribute__((naked)) void *alignPointer(void *p, uint32_t mask)
+{
+	__asm volatile(
+		/* Get the pointer offset */
+		"ldao r2, r0		\n"
+
+		/* Align the pointer offset as required */
+		"not r1, r1			\n"
+		"and r2, r2, r1		\n"
+
+		/* Replace the offset in the pointer */
+		"ldab r0, r0		\n"
+		"lda8 r0, r0, r2	\n"
+
+		/* Finish! */
+		"ret				\n"
+	);
+}
+
+__attribute__((naked)) int isPointerAligned(void *p, uint32_t mask)
+{
+	__asm volatile(
+		/* Get the pointer offset */
+		"ldao r0, r0		\n"
+
+		/* Mask out the byte offset */
+		"and r0, r0, r1		\n"
+
+		/* Check whether it is aligned */
+		"eqi r0, r0, 0		\n"
+
+		/* Return */
+		"ret				\n"
+	);
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //// PANIC HANDLERS
 //////////////////////////////////////////////////////////////////////////////

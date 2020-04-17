@@ -11,8 +11,10 @@ _start:
         setwp r0
 
 		; Set the compatibility flag for PANIC mode
-		ldc r0, 3
-		blr setCompatibilityFlag
+		getsr r1
+		ldc r2, 1
+		insertbi r1, r2, 134
+		setsr r1
 
 		; Set the compatibility flag for INTERRUPT mode
 		ldc r0, 2
