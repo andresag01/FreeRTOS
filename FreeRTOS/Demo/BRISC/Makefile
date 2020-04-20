@@ -1,13 +1,13 @@
 # Compiler and toolchain
-LLVM_BASE_DIR = /Users/andresag/Documents/repos/llvm-beyondrisc/build/bin
+LLVM_BASE_DIR = /home/andresag/Repos/llvm-project-beyondrisc/build/bin
 CLANG         = $(LLVM_BASE_DIR)/clang
 LLC           = $(LLVM_BASE_DIR)/llc
 DISASSEMBLER  = $(LLVM_BASE_DIR)/llvm-dis
 
-BRISC_ASM_DIR = /Users/andresag/Documents/repos/brisc-assembler
+BRISC_ASM_DIR = /home/andresag/Repos/brisc-assembler
 ASM           = $(BRISC_ASM_DIR)/assembler.py
 
-INSTR_DB = /Users/andresag/Documents/repos/sure-specification/isa/instructions
+INSTR_DB = /home/andresag/Repos/IHGC-Specifications/isa/instructions
 
 # Compiler and toolchain flags
 ARCH = cpu0

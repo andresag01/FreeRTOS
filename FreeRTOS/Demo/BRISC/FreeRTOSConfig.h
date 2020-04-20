@@ -59,7 +59,7 @@
  * from the tskTaskControlBlock struct.
  */
 #define configMAX_TASK_NAME_LEN 16
-#define configIDLE_SHOULD_YIELD 0
+#define configIDLE_SHOULD_YIELD 1
 
 #define configASSERT( x ) assert( x )
 

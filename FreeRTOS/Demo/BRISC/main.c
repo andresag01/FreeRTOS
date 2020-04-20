@@ -14,7 +14,8 @@
 #define mainCHECK_TASK_PRIORITY		( tskIDLE_PRIORITY + 4 )
 
 /* The rate at which the errors are checked. */
-#define mainNO_ERROR_DELAY_PERIOD	( ( TickType_t ) 3000 / portTICK_PERIOD_MS  )
+//#define mainNO_ERROR_DELAY_PERIOD	( ( TickType_t ) 3000 / portTICK_PERIOD_MS  )
+#define mainNO_ERROR_DELAY_PERIOD ( 1000 )
 
 /*-----------------------------------------------------------*/
 
