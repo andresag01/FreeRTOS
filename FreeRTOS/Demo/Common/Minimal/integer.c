@@ -93,6 +93,8 @@ volatile BaseType_t *pxTaskHasExecuted;
 	/* Keep performing a calculation and checking the result against a constant. */
 	for( ;; )
 	{
+        printString("IntMath\n");
+
 		/* Perform the calculation.  This will store partial value in
 		registers, resulting in a good test of the context switch mechanism. */
 		lValue = intgCONST1;

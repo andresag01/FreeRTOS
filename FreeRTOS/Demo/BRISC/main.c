@@ -15,7 +15,7 @@
 
 /* The rate at which the errors are checked. */
 //#define mainNO_ERROR_DELAY_PERIOD	( ( TickType_t ) 3000 / portTICK_PERIOD_MS  )
-#define mainNO_ERROR_DELAY_PERIOD ( 1000 )
+#define mainNO_ERROR_DELAY_PERIOD ( 50 )
 
 /*-----------------------------------------------------------*/
 
@@ -55,7 +55,7 @@ int main( void )
     vStartIntegerMathTasks( tskIDLE_PRIORITY );
 
     /* Start the check task - which is defined in this file. */
-    printString("Creating ErrorChecks task...\n");
+    printString("Setting up ErrorChecks task...\n");
     xTaskCreate( vErrorChecks,
                  "Check",
                  configMINIMAL_STACK_SIZE,
@@ -79,6 +79,7 @@ int main( void )
      * set the correct interrupt handler address. See startup.asm for more
      * information on how this mechanism works
      */
+    printString("Terminating setup...\n");
 	return 0;
 }
 
@@ -97,6 +98,8 @@ static void vErrorChecks( void *pvParameters )
 	{
 		/* Delay until it is time to execute again. */
 		vTaskDelay( mainNO_ERROR_DELAY_PERIOD );
+
+        printString("vErrorChecks\n");
 
 		/* Check all the standard demo application tasks are executing without
 		error.  ulMemCheckTaskRunningCount is checked to ensure it was
