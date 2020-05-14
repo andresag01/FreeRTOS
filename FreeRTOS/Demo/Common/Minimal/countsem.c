@@ -73,13 +73,13 @@ static void prvCountingSemaphoreTask( void *pvParameters );
  * Utility function to increment the semaphore count value up from zero to
  * countMAX_COUNT_VALUE.
  */
-static void prvIncrementSemaphoreCount( SemaphoreHandle_t xSemaphore, volatile UBaseType_t *puxLoopCounter );
+static void prvIncrementSemaphoreCount( const char *name, SemaphoreHandle_t xSemaphore, volatile UBaseType_t *puxLoopCounter );
 
 /*
  * Utility function to decrement the semaphore count value up from
  * countMAX_COUNT_VALUE to zero.
  */
-static void prvDecrementSemaphoreCount( SemaphoreHandle_t xSemaphore, volatile UBaseType_t *puxLoopCounter );
+static void prvDecrementSemaphoreCount( const char *name, SemaphoreHandle_t xSemaphore, volatile UBaseType_t *puxLoopCounter );
 
 /*-----------------------------------------------------------*/
 
@@ -97,6 +97,8 @@ typedef struct COUNT_SEM_STRUCT
 	/* Incremented on each cycle of the demo task.  Used to detect a stalled
 	task. */
 	volatile UBaseType_t uxLoopCounter;
+
+    const char *name;
 } xCountSemStruct;
 
 /* Two structures are defined, one is passed to each test task. */
@@ -112,10 +114,12 @@ void vStartCountingSemaphoreTasks( void )
 	xParameters[ 0 ].xSemaphore = xSemaphoreCreateCounting( countMAX_COUNT_VALUE, countMAX_COUNT_VALUE );
 	xParameters[ 0 ].uxExpectedStartCount = countSTART_AT_MAX_COUNT;
 	xParameters[ 0 ].uxLoopCounter = 0;
+    xParameters[ 0 ].name = "CNT1";
 
 	xParameters[ 1 ].xSemaphore = xSemaphoreCreateCounting( countMAX_COUNT_VALUE, 0 );
 	xParameters[ 1 ].uxExpectedStartCount = 0;
 	xParameters[ 1 ].uxLoopCounter = 0;
+    xParameters[ 1 ].name = "CNT2";
 
 	/* Were the semaphores created? */
 	if( ( xParameters[ 0 ].xSemaphore != NULL ) || ( xParameters[ 1 ].xSemaphore != NULL ) )
@@ -136,7 +140,7 @@ void vStartCountingSemaphoreTasks( void )
 }
 /*-----------------------------------------------------------*/
 
-static void prvDecrementSemaphoreCount( SemaphoreHandle_t xSemaphore, volatile UBaseType_t *puxLoopCounter )
+static void prvDecrementSemaphoreCount( const char *name, SemaphoreHandle_t xSemaphore, volatile UBaseType_t *puxLoopCounter )
 {
 UBaseType_t ux;
 
@@ -161,6 +165,10 @@ UBaseType_t ux;
 		( *puxLoopCounter )++;
 	}
 
+    printString( "Taken semaphore: " );
+    printString( name );
+    putchar('\n' );
+
 	#if configUSE_PREEMPTION == 0
 		taskYIELD();
 	#endif
@@ -175,7 +183,7 @@ UBaseType_t ux;
 }
 /*-----------------------------------------------------------*/
 
-static void prvIncrementSemaphoreCount( SemaphoreHandle_t xSemaphore, volatile UBaseType_t *puxLoopCounter )
+static void prvIncrementSemaphoreCount( const char *name, SemaphoreHandle_t xSemaphore, volatile UBaseType_t *puxLoopCounter )
 {
 UBaseType_t ux;
 
@@ -199,6 +207,10 @@ UBaseType_t ux;
 
 		( *puxLoopCounter )++;
 	}
+
+    printString( "Given semaphore: " );
+    printString( name );
+    putchar('\n' );
 
 	#if configUSE_PREEMPTION == 0
 		taskYIELD();
@@ -233,7 +245,7 @@ xCountSemStruct *pxParameter;
 	at zero? */
 	if( pxParameter->uxExpectedStartCount == countSTART_AT_MAX_COUNT )
 	{
-		prvDecrementSemaphoreCount( pxParameter->xSemaphore, &( pxParameter->uxLoopCounter ) );
+		prvDecrementSemaphoreCount( pxParameter->name, pxParameter->xSemaphore, &( pxParameter->uxLoopCounter ) );
 	}
 
 	/* Now we expect the semaphore count to be 0, so this time there is an
@@ -245,8 +257,8 @@ xCountSemStruct *pxParameter;
 
 	for( ;; )
 	{
-		prvIncrementSemaphoreCount( pxParameter->xSemaphore, &( pxParameter->uxLoopCounter ) );
-		prvDecrementSemaphoreCount( pxParameter->xSemaphore, &( pxParameter->uxLoopCounter ) );
+		prvIncrementSemaphoreCount( pxParameter->name, pxParameter->xSemaphore, &( pxParameter->uxLoopCounter ) );
+		prvDecrementSemaphoreCount( pxParameter->name, pxParameter->xSemaphore, &( pxParameter->uxLoopCounter ) );
 	}
 }
 /*-----------------------------------------------------------*/

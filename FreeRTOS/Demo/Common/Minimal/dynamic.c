@@ -109,7 +109,7 @@ static portTASK_FUNCTION_PROTO( vQueueSendWhenSuspendedTask, pvParameters );
 	#define priSUSPENDED_RX_TASK_STACK_SIZE			( configMINIMAL_STACK_SIZE )
 #endif
 #define priSTACK_SIZE				( configMINIMAL_STACK_SIZE )
-#define priSLEEP_TIME				pdMS_TO_TICKS( 128 )
+#define priSLEEP_TIME				( 128 )
 #define priLOOPS					( 5 )
 #define priMAX_COUNT				( ( uint32_t ) 0xff )
 #define priNO_BLOCK					( ( TickType_t ) 0 )
@@ -192,6 +192,7 @@ volatile uint32_t *pulCounter;
 
 		if( *pulCounter >= priMAX_COUNT )
 		{
+            printString("Limit\n");
 			vTaskSuspend( NULL );
 		}
 	}
@@ -222,6 +223,7 @@ UBaseType_t uxOurPriority;
 		vTaskPrioritySet( NULL, uxOurPriority + 1 );
 		{
 			configASSERT( ( uxTaskPriorityGet( NULL ) == ( uxOurPriority + 1 ) ) );
+            printString("Count\n");
 			( *pulCounter )++;
 		}
 		vTaskPrioritySet( NULL, uxOurPriority );

@@ -95,7 +95,7 @@ static portTASK_FUNCTION( vSuicidalTask, pvParameters )
 {
 volatile long l1, l2;
 TaskHandle_t xTaskToKill;
-const TickType_t xDelay = pdMS_TO_TICKS( ( TickType_t ) 200 );
+const TickType_t xDelay = ( TickType_t ) 200;
 
 	/* Test deletion of a task's secure context, if any. */
 	portALLOCATE_SECURE_CONTEXT( configMINIMAL_SECURE_STACK_SIZE );
@@ -106,10 +106,14 @@ const TickType_t xDelay = pdMS_TO_TICKS( ( TickType_t ) 200 );
 		passed a handle to the other task so it can kill it before killing itself.
 		The other task is passed in null. */
 		xTaskToKill = *( TaskHandle_t* )pvParameters;
+
+        printString( "Killer\n" );
 	}
 	else
 	{
 		xTaskToKill = NULL;
+
+        printString( "Killed\n" );
 	}
 
 	for( ;; )
@@ -137,7 +141,7 @@ const TickType_t xDelay = pdMS_TO_TICKS( ( TickType_t ) 200 );
 
 static portTASK_FUNCTION( vCreateTasks, pvParameters )
 {
-const TickType_t xDelay = pdMS_TO_TICKS( ( TickType_t ) 1000 );
+const TickType_t xDelay = ( TickType_t ) 1000;
 UBaseType_t uxPriority;
 
 	/* Remove compiler warning about unused parameter. */
@@ -154,6 +158,10 @@ UBaseType_t uxPriority;
 	{
 		/* Just loop round, delaying then creating the four suicidal tasks. */
 		vTaskDelay( xDelay );
+
+        printString( "Start iteration: " );
+        printHex( usCreationCount );
+        putchar( '\n' );
 
 		xCreatedTask = NULL;
 

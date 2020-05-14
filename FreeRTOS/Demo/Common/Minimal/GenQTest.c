@@ -49,7 +49,7 @@
 
 #define genqQUEUE_LENGTH		( 5 )
 #define intsemNO_BLOCK			( 0 )
-#define genqSHORT_BLOCK			( pdMS_TO_TICKS( 2 ) )
+#define genqSHORT_BLOCK			( 2 )
 
 #define genqMUTEX_LOW_PRIORITY		( tskIDLE_PRIORITY )
 #define genqMUTEX_TEST_PRIORITY		( tskIDLE_PRIORITY + 1 )
@@ -938,6 +938,8 @@ SemaphoreHandle_t xMutex = ( SemaphoreHandle_t ) pvParameters, xLocalMutex;
 			prvHighPriorityTimeout( xMutex );
 		}
 		#endif
+
+		printString("prvLowPriorityMutexTask\n");
 	}
 }
 /*-----------------------------------------------------------*/
@@ -956,6 +958,8 @@ static void prvMediumPriorityMutexTask( void *pvParameters )
 		variable, this is so the low priority task knows that it has
 		executed. */
 		ulGuardedVariable++;
+
+		printString("prvMediumPriorityMutexTask\n");
 	}
 }
 /*-----------------------------------------------------------*/
@@ -995,6 +999,8 @@ SemaphoreHandle_t xMutex = ( SemaphoreHandle_t ) pvParameters;
 				xErrorDetected = pdTRUE;
 			}
 		}
+
+		printString("prvHighPriorityMutexTask\n");
 	}
 }
 /*-----------------------------------------------------------*/
