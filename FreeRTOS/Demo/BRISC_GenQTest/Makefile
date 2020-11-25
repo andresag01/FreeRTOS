@@ -21,7 +21,7 @@ CFLAGS = -O$(OLEVEL) -emit-llvm -nostdlib -target $(ARCH) -ffreestanding \
 		-isystem $(SYSROOT_DIR) --sysroot $(SYSROOT_DIR)
 LFLAGS = -relocation-model=pic -march=$(ARCH) -O$(OLEVEL) -filetype=asm
 AFLAGS = --prog-handle 1       \
-	--handle-bits 16           \
+	--handle-bits 15           \
 	--instructions $(INSTR_DB) \
 	--entry $(ENTRY_FUNC)
 
